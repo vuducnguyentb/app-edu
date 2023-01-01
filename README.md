@@ -1,1 +1,1 @@
-# app-edu
+Base project
