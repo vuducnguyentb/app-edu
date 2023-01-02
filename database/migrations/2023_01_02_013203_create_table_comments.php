@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableSlidesTable extends Migration
+class CreateTableComments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,19 @@ class CreateTableSlidesTable extends Migration
      */
     public function up()
     {
-        Schema::create('slides', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->bigInteger('file_id')->unsigned()->nullable();
-            $table->integer('position')->default(0);
-            $table->integer('type')->default(1)->comment('Loại slide.');
+            $table->string('content')->nullable();
+            $table->string('email')->nullable();
+            $table->bigInteger('post_id')->unsigned()->nullable();
+            $table->nestedSet();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('file_id', 'fk_slide_file')
-                ->references('id')->on('files');
-
+            $table->foreign('post_id', 'fk_comment_post')
+                ->references('id')->on('posts');
         });
     }
 
@@ -38,7 +36,9 @@ class CreateTableSlidesTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('slides');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropNestedSet();
+        });
+        Schema::dropIfExists('comments');
     }
 }

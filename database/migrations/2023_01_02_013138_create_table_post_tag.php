@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableSlidesTable extends Migration
+class CreateTablePostTag extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreateTableSlidesTable extends Migration
      */
     public function up()
     {
-        Schema::create('slides', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->bigInteger('file_id')->unsigned()->nullable();
-            $table->integer('position')->default(0);
-            $table->integer('type')->default(1)->comment('Loại slide.');
+        Schema::create('post_tag', function (Blueprint $table) {
+            $table->bigInteger('tag_id')->unsigned()->nullable();
+            $table->bigInteger('post_id')->unsigned()->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('file_id', 'fk_slide_file')
-                ->references('id')->on('files');
-
+            $table->primary(['tag_id', 'post_id']);
+            $table->foreign('tag_id', 'fk_post_tag_tag')->references('id')->on('tags');
+            $table->foreign('post_id', 'fk_post_tag_post')->references('id')->on('posts');
         });
     }
 
@@ -39,6 +35,6 @@ class CreateTableSlidesTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('slides');
+        Schema::dropIfExists('post_tag');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableMenusTable extends Migration
+class CreateTableCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateTableMenusTable extends Migration
      */
     public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title', 255);
-            $table->string('icon', 255)->nullable();
-            $table->bigInteger('parent_id')->unsigned()->nullable();
-            $table->string('url', 255);
+            $table->string('name');
+            $table->string('description')->nullable()->comment('mô tả');
+            $table->string('slug')->unique();
+            $table->tinyInteger('status')->default(0);
+            $table->nestedSet();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
-            $table->softDeletes();
             $table->timestamps();
-
         });
     }
 
@@ -35,7 +34,9 @@ class CreateTableMenusTable extends Migration
      */
     public function down()
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('menus');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropNestedSet();
+        });
+        Schema::dropIfExists('categories');
     }
 }
