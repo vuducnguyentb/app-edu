@@ -28,7 +28,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-@include('admin.sidebar')
+    @livewire('admin.sidebar-component')
 <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
