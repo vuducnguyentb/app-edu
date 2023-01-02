@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Admin\HomeComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,7 +13,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => 'admin', 'as' => 'v1.'], function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    Route::get('/dashboard', HomeComponent::class);
 });
+
+
