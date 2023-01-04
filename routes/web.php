@@ -18,6 +18,9 @@ Route::group(['prefix' => 'admin', 'as' => 'v1.'], function () {
         return view('welcome');
     });
     Route::get('/dashboard', HomeComponent::class);
+    #danh mục
+    Route::get('/category', \App\Http\Livewire\Admin\AdminCategoryComponent::class);
+    Route::get('/add-category', \App\Http\Livewire\Admin\AdminAddCategoryComponent::class)->name('admin-add-category');
 });
 
 
